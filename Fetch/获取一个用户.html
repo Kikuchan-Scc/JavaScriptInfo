@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+
+</body>
+
+<script>
+    const getUsers = async (names) => {
+      //创建一个空数组存储数据
+      const jobs = [];
+      //把用户信息循环出来
+      for(let name of names) {
+        //获取https://api.github.com/users/${name}
+        let job = fetch(`https://api.github.com/users/${name}`)
+          //成功响应
+          .then(successResponse => {
+            //如果成功响应状态码不等于200返回null。tips:状态码200请求成功。一般用于GET与POST请求
+            if(successResponse.status !== 200) {
+              return null
+            //否则调用json读取对象
+            } else {
+              return successResponse.json()
+            }
+            //响应失败返回null
+          },failResponse => {
+            return null
+          })
+          //将job数据添加到jobs空数组中
+          jobs.push(job)
+      }
+      let results = await Promise.all(jobs)
+      return results
+    }
+</script>
+
+</html> 
